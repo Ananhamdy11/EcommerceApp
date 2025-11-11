@@ -18,7 +18,7 @@ The app provides a clean UI, product listings, shopping cart, and checkout flow 
 
 ## ⚙️ Getting Started
 
-### 1️⃣ Clone the repositor
-- git clone https://github.com/YourUsername/EcommerceApp.git
+### 1️⃣ Clone the repository
+- git clone https://github.com/Ananhamdy11/EcommerceApp.git
 - cd EcommerceApp
 
