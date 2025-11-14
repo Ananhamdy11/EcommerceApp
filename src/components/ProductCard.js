@@ -1,13 +1,22 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { Button, Image, Text, TouchableOpacity, View, StyleSheet } from "react-native";
-
+import { useDispatch } from 'react-redux';
+import { useNavigation } from "@react-navigation/native";
+import {addToCart}from'../redux/slices/cartSlice'
 export default function ProductCard({ product }) {
-  function getStars(rating) {
-  if (!rating) return "No rating";
-  const rounded = Math.round(rating); 
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const handleAddToCart = () => {
+    dispatch(addToCart(product));
+    navigation.navigate("Cart");
+  }
 
-  return "★".repeat(rounded) + "☆".repeat(5 - rounded);
-}
+  function getStars(rating) {
+    if (!rating) return "No rating";
+    const rounded = Math.round(rating);
+
+    return "★".repeat(rounded) + "☆".repeat(5 - rounded);
+  }
 
 
   return (
@@ -25,14 +34,14 @@ export default function ProductCard({ product }) {
           {product.description}
         </Text>
         <Text style={styles.price}>${product.price}</Text>
-<View style={styles.rating}>
-  <Text style={styles.rate}>{getStars(product.rating?.rate)}</Text>
-  <Text style={styles.count}>{product.rating?.count || 0} reviews</Text>
-</View>
+        <View style={styles.rating}>
+          <Text style={styles.rate}>{getStars(product.rating?.rate)}</Text>
+          <Text style={styles.count}>{product.rating?.count || 0} reviews</Text>
+        </View>
 
 
-        <TouchableOpacity style={styles.button}>
-            <FontAwesome name="shopping-cart" size={16} color="#fff" style={{ marginRight: 10 }}/>
+        <TouchableOpacity style={styles.button} onPress={handleAddToCart}>
+          <FontAwesome name="shopping-cart" size={16} color="#fff" style={{ marginRight: 10 }} />
           <Text style={styles.buttonText}>Add To Cart</Text>
         </TouchableOpacity>
       </View>
@@ -49,7 +58,7 @@ const styles = StyleSheet.create({
     margin: 8,
     flex: 1,
     elevation: 5,
-    shadowColor: "#000", 
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
@@ -98,11 +107,11 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   button: {
-    flexDirection:"row",
-    justifyContent:'center',
+    flexDirection: "row",
+    justifyContent: 'center',
     backgroundColor: "#000",
     paddingVertical: 6,
-    color:"white",
+    color: "white",
     borderRadius: 6,
     alignItems: "center",
   },
