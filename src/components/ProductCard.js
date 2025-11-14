@@ -8,7 +8,6 @@ export default function ProductCard({ product }) {
   const navigation = useNavigation();
   const handleAddToCart = () => {
     dispatch(addToCart(product));
-    navigation.navigate("Cart");
   }
 
   function getStars(rating) {
@@ -52,6 +51,7 @@ export default function ProductCard({ product }) {
 // Card Styling
 const styles = StyleSheet.create({
   card: {
+    width:150,
     backgroundColor: "#fff",
     borderRadius: 12,
     overflow: "hidden",
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 120,
+    height: 100,
     resizeMode: "contain",
     backgroundColor: "#f9f9f9",
   },
