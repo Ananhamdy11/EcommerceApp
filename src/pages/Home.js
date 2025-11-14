@@ -4,13 +4,22 @@ import {
   FlatList,
   View,
   Text,
+  ImageBackground,
   StyleSheet,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../components/ProductCard";
 import { fetchProducts } from "../redux/slices/productSlice";
 import Header from "../components/Header/Header";
-import SearchBar from "../components/SearchBar"; // استدعاء SearchBar
+import SearchBar from "../components/SearchBar";
+import SponsoredCard from "../components/SponsoredCard";
+
+// ---------------------------
+// Base64 Gradient Background
+// ---------------------------
+const bgGradient = {
+  uri: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wCEAAkGBxISEhUTEhIVFRUXGBcYGBgYFxcXGBcYFxUXFxcYFxUYHSggGBolHRUWITEiJSkrLi4uFx8zODMtNygtLisBCgoKDg0OGxAQGy0lICUtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAKMBNwMBIgACEQEDEQH/xAAbAAADAQEBAQEAAAAAAAAAAAAABQYBAwQCB//EADkQAAIBAwIDBgQFAwQDAQAAAAECAwAEEQUSITEGEyJBUWEUMnGBkaEUQlKCscHR4fAzQ1NicuHx/8QAGgEBAAMBAQEAAAAAAAAAAAAAAAECBAMFBv/EACIRAQEAAgICAwEBAAAAAAAAAAABAhEDIRIxBBNBUWFxIv/aAAwDAQACEQMRAD8A",
+};
 
 export default function Home({ navigation }) {
   const dispatch = useDispatch();
@@ -20,7 +29,6 @@ export default function Home({ navigation }) {
     error,
   } = useSelector((state) => state.products);
 
-  // State للبحث
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
 
@@ -28,7 +36,6 @@ export default function Home({ navigation }) {
     dispatch(fetchProducts());
   }, [dispatch]);
 
-  // فلترة المنتجات حسب البحث
   useEffect(() => {
     if (!searchQuery) {
       setFilteredProducts(products);
@@ -40,55 +47,53 @@ export default function Home({ navigation }) {
     }
   }, [searchQuery, products]);
 
-  const handleMenuPress = () => {
-    console.log("Menu pressed");
-  };
-
-  const handleProfilePress = () => {
-    console.log("Profile pressed");
+  const renderItem = ({ item, index }) => {
+    if (index === 2) {
+      return (
+        <>
+          <View style={styles.sponsoredContainer}>
+            <SponsoredCard />
+          </View>
+          <ProductCard product={item} />
+        </>
+      );
+    }
+    return <ProductCard product={item} />;
   };
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <Header
-          onMenuPress={handleMenuPress}
-          onProfilePress={handleProfilePress}
-        />
+      <ImageBackground source={bgGradient} style={styles.bg}>
+        <Header />
         <View style={styles.centered}>
-          <ActivityIndicator size={"large"} color="#E94057" />
+          <ActivityIndicator size="large" color="#E94057" />
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.container}>
-        <Header
-          onMenuPress={handleMenuPress}
-          onProfilePress={handleProfilePress}
-        />
+      <ImageBackground source={bgGradient} style={styles.bg}>
+        <Header />
         <View style={styles.centered}>
           <Text style={styles.error}>Error: {error}</Text>
         </View>
-      </View>
+      </ImageBackground>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <Header
-        onMenuPress={handleMenuPress}
-        onProfilePress={handleProfilePress}
-      />
-      {/* SearchBar */}
+    <ImageBackground source={bgGradient} style={styles.bg}>
+      <Header />
+
       <SearchBar value={searchQuery} onChange={setSearchQuery} />
 
-      {/* Products List */}
+      <Text style={styles.sectionTitle}>Featured Products</Text>
+
       <FlatList
         data={filteredProducts}
-        renderItem={({ item }) => <ProductCard product={item} />}
+        renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         numColumns={2}
         contentContainerStyle={styles.listContent}
@@ -98,14 +103,14 @@ export default function Home({ navigation }) {
           </View>
         }
       />
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  bg: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FFF",
   },
   centered: {
     flex: 1,
@@ -119,9 +124,21 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingHorizontal: 20,
   },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#222",
+    marginLeft: 14,
+    marginTop: 10,
+    marginBottom: 6,
+  },
   listContent: {
     paddingHorizontal: 8,
-    paddingTop: 12,
     paddingBottom: 20,
+  },
+  sponsoredContainer: {
+    width: "100%",
+    paddingHorizontal: 8,
+    paddingVertical: 14,
   },
 });
