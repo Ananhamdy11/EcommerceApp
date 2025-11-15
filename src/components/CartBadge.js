@@ -4,9 +4,11 @@ import { useSelector } from "react-redux";
 export default function CartBadge() {
 const { carts, currentUserId } = useSelector((state) => state.cart);
 
-  const userCart = carts.find(c => c.userId === currentUserId);
+const userCart = carts.find(c => c.userId === currentUserId);
+const count = userCart ? userCart.products.length : 0;
 
-  const count = userCart ? userCart.products.reduce((acc, p) => acc + p.quantity, 0) : 0;    return(
+ 
+return(
   <View
       style={{
         position: "absolute",
