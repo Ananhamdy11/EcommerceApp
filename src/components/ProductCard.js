@@ -18,8 +18,12 @@ export default function ProductCard({ product }) {
   }
 
 
+  const handleCardPress = () => {
+    navigation.navigate("ProductDetails", { product });
+  };
+
   return (
-    <TouchableOpacity style={styles.card} >
+    <TouchableOpacity style={styles.card} onPress={handleCardPress}>
       <Image
         source={{ uri: product.image }}
         style={styles.image}
