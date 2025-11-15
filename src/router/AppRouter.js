@@ -1,11 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
-
-
-
 import MainStack from "./MainStack";
 import { persistor } from "../redux/store";
 import { PersistGate } from "redux-persist/integration/react";
-import { ActivityIndicator, View } from "react-native-web";
+import { ActivityIndicator, View } from "react-native";
 
 
 export default function AppRouter() {
