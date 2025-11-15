@@ -4,9 +4,14 @@ const cartSlice = createSlice({
   name: "cart",
   initialState: {
     carts: [], 
-    currentUserId: 1,
+    currentUserId: null, 
   },
   reducers: {
+    
+    setCurrentUser: (state, action) => {
+      state.currentUserId = action.payload;
+    },
+
     addToCart: (state, action) => {
       const userCart = state.carts.find(c => c.userId === state.currentUserId);
 
@@ -55,6 +60,13 @@ const cartSlice = createSlice({
   }
 });
 
-export const { addToCart, removeFromCart, increaseQuantity, decreaseQuantity, clearCart } = cartSlice.actions;
+export const { 
+  addToCart, 
+  removeFromCart, 
+  increaseQuantity, 
+  decreaseQuantity, 
+  clearCart,
+  setCurrentUser 
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -2,14 +2,17 @@ import { Text, View } from "react-native";
 import { useSelector } from "react-redux";
 
 export default function CartBadge() {
-const { carts, currentUserId } = useSelector((state) => state.cart);
+  const { carts, currentUserId } = useSelector((state) => state.cart);
 
-const userCart = carts.find(c => c.userId === currentUserId);
-const count = userCart ? userCart.products.length : 0;
 
- 
-return(
-  <View
+  const userCart = carts.find(c => c.userId === currentUserId);
+  const count = userCart?.products?.length || 0;  
+
+  
+  if (count === 0) return null;
+
+  return (
+    <View
       style={{
         position: "absolute",
         top: -5,
@@ -27,5 +30,5 @@ return(
         {count}
       </Text>
     </View>
-    );
-};
+  );
+}
