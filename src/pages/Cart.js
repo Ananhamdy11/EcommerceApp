@@ -4,12 +4,13 @@ import { removeFromCart, increaseQuantity, decreaseQuantity, clearCart } from ".
 
 export default function CartScreen() {
   const dispatch = useDispatch();
-  const cart = useSelector(state => {
-    const userCart = state.cart.carts.find(c => c.userId === state.cart.currentUserId);
-    return userCart ? userCart.products : [];
-  });
+  
+  // اضافه
+  const { carts, currentUserId } = useSelector(state => state.cart);
+  const userCart = carts.find(c => c.userId === currentUserId);
+  const cart = userCart?.products || []; // اضافه
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
   const renderItem = ({ item }) => (
     <View style={styles.cartItem}>
@@ -58,6 +59,7 @@ export default function CartScreen() {
         ListEmptyComponent={
           <View style={styles.emptyCart}>
             <Text style={styles.emptyCartText}>Your cart is empty</Text>
+            <Text style={styles.emptyCartSubtext}>Add some products to get started!</Text>
           </View>
         }
         contentContainerStyle={styles.listContent}
@@ -86,6 +88,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
+  },
+ 
+  userInfoText: {
+    fontSize: 12,
+    color: "#666",
+    fontWeight: "500",
   },
   listContent: {
     padding: 10,
@@ -179,6 +187,13 @@ const styles = StyleSheet.create({
   emptyCartText: {
     fontSize: 18,
     color: "#999",
+    fontWeight: "600",
+  },
+  
+  emptyCartSubtext: {
+    fontSize: 14,
+    color: "#bbb",
+    marginTop: 8,
   },
   footer: {
     backgroundColor: "#fff",
